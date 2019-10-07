@@ -44,5 +44,16 @@ public class PopulationController
                 HttpStatus.OK);
     }
 
+    //localhost:2019/median
+    @RequestMapping(value = "/median", produces = {"application/json"})
+    public ResponseEntity<?> getMedianPopulation()
+    {
+        JavacountriesApplication.myCountryList.countryList.sort((c1, c2) -> (int)(c1.getPopulation() - c2.getPopulation()));
+        int medIndex = JavacountriesApplication.myCountryList.countryList.size()/2;
+//        System.out.println("List Size "+JavacountriesApplication.myCountryList.countryList.size()
+//        +" MI "+medIndex);
+        return new ResponseEntity<>(JavacountriesApplication.myCountryList.countryList.get(medIndex),
+                HttpStatus.OK);
+    }
 }
 

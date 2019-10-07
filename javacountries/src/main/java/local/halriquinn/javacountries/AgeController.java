@@ -44,4 +44,16 @@ public class AgeController
         return new ResponseEntity<>(JavacountriesApplication.myCountryList.countryList.get(0),
                 HttpStatus.OK);
     }
+
+    //localhost:2019/age/median
+    @RequestMapping(value = "/median", produces = {"application/json"})
+    public ResponseEntity<?> getMedianAge()
+    {
+        JavacountriesApplication.myCountryList.countryList.sort((c1, c2) -> (int)(c1.getMedianAge() - c2.getMedianAge()));
+        int medIndex = JavacountriesApplication.myCountryList.countryList.size()/2;
+//        System.out.println("List Size "+JavacountriesApplication.myCountryList.countryList.size()
+//                +" MI "+medIndex);
+        return new ResponseEntity<>(JavacountriesApplication.myCountryList.countryList.get(medIndex),
+                HttpStatus.OK);
+    }
 }
