@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
+import static java.lang.Integer.parseInt;
+
 @RestController
 @RequestMapping("/names")
 public class CountryController
@@ -27,10 +29,24 @@ public class CountryController
     @RequestMapping(value = "/start/{letter}", produces = {"application/json"})
     public ResponseEntity<?> getCountriesByLetter(@PathVariable char letter)
     {
-        ArrayList<Country> tempCountryList =JavacountriesApplication.myCountryList.findAllCountries(e->e
+        ArrayList<Country> tempCountryList = JavacountriesApplication.myCountryList.findAllCountries(e -> e
                 .getCountryName()
                 .toUpperCase()
                 .charAt(0) == Character.toUpperCase(letter));
+
+        tempCountryList.sort((e1, e2) -> e1.getCountryName()
+                .compareToIgnoreCase(e2.getCountryName()));
+
+        return new ResponseEntity<>(tempCountryList,
+                HttpStatus.OK);
+    }
+
+    //localhost:2019/names/size/8
+    @RequestMapping(value = "/size/{number}", produces = {"application/json"})
+    public ResponseEntity<?> getCountriesByNameLength(@PathVariable int number)
+    {
+        ArrayList<Country> tempCountryList = JavacountriesApplication.myCountryList.findAllCountries(e ->
+        e.getCountryName().length()>= number);
 
         tempCountryList.sort((e1, e2) -> e1.getCountryName()
                 .compareToIgnoreCase(e2.getCountryName()));
