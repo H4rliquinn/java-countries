@@ -7,10 +7,42 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 @RestController
-@RequestMapping("/size")
+@RequestMapping("/population")
 public class PopulationController
 {
-   
+    //localhost:2019/population/size/5000000
+    @RequestMapping(value = "/size/{people}", produces = {"application/json"})
+    public ResponseEntity<?> getCountriesMinPopulation(@PathVariable long people)
+    {
+        ArrayList<Country> tempCountryList = JavacountriesApplication.myCountryList.findAllCountries(e ->
+                e.getPopulation()>= people);
+
+        tempCountryList.sort((c1, c2) -> (int)(c1.getPopulation() - c2.getPopulation()));
+
+        return new ResponseEntity<>(tempCountryList,
+                HttpStatus.OK);
+    }
+
+    //localhost:2019/population/min
+    @RequestMapping(value = "/min", produces = {"application/json"})
+    public ResponseEntity<?> getSmallestCountry()
+    {
+        JavacountriesApplication.myCountryList.countryList.sort((c1, c2) -> (int)(c1.getPopulation() - c2.getPopulation()));
+
+        return new ResponseEntity<>(JavacountriesApplication.myCountryList.countryList.get(0),
+                HttpStatus.OK);
+    }
+
+    //localhost:2019/population/max
+
+    @RequestMapping(value = "/max", produces = {"application/json"})
+    public ResponseEntity<?> getLargestCountry()
+    {
+        JavacountriesApplication.myCountryList.countryList.sort((c1, c2) -> (int)(c2.getPopulation() - c1.getPopulation()));
+
+        return new ResponseEntity<>(JavacountriesApplication.myCountryList.countryList.get(0),
+                HttpStatus.OK);
+    }
 
 }
 
